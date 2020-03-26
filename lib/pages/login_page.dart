@@ -1,3 +1,5 @@
+import 'package:carros/widgets/app_button.dart';
+import 'package:carros/widgets/app_campo_texto.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -42,77 +44,23 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(height: 10),
-            _campoTexto(
-              'Login',
-              'Informe seu login',
-              controller: _tLogin,
-              validator: _validateLogin,
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
-              nextFocus: _focusSenha
-            ),
+            AppCampoTexto('Login', 'Informe seu login',
+                controller: _tLogin,
+                validator: _validateLogin,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                nextFocus: _focusSenha),
             SizedBox(height: 10),
-            _campoTexto('Senha', 'Informe sua senha',
+            AppCampoTexto('Senha', 'Informe sua senha',
                 esconderTexto: true,
                 controller: _tSenha,
                 validator: _validateSenha,
                 keyboardType: TextInputType.number,
                 focusNode: _focusSenha),
             SizedBox(height: 20),
-            _botao('Login', _onClickLogin),
+            AppButton('Login', onPressed: _onClickLogin),
           ],
         ),
-      ),
-    );
-  }
-
-  TextFormField _campoTexto(String label, String hint,
-      {bool esconderTexto = false,
-      TextEditingController controller,
-      FormFieldValidator<String> validator,
-      TextInputType keyboardType,
-      TextInputAction textInputAction,
-      FocusNode focusNode,
-      FocusNode nextFocus}) {
-    return TextFormField(
-      controller: controller,
-      obscureText: esconderTexto,
-      validator: validator,
-      keyboardType: keyboardType,
-      textInputAction: textInputAction,
-      focusNode: focusNode,
-      onFieldSubmitted: (String text) {
-        if(nextFocus != null) {
-          FocusScope.of(context).requestFocus(nextFocus);
-        }
-      },
-      style: TextStyle(
-        fontSize: 25,
-        color: Colors.blue,
-      ),
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(
-          fontSize: 25,
-        ),
-        hintText: hint,
-      ),
-    );
-  }
-
-  Container _botao(String texto, Function onPressed) {
-    return Container(
-      height: 50,
-      child: RaisedButton(
-        color: Colors.blue,
-        child: Text(
-          texto,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-          ),
-        ),
-        onPressed: onPressed,
       ),
     );
   }
