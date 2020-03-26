@@ -42,6 +42,7 @@ class AppCampoTexto extends StatelessWidget {
         color: Colors.blue,
       ),
       decoration: InputDecoration(
+        border: OutlineInputBorder(),
         labelText: label,
         labelStyle: TextStyle(
           fontSize: 25,

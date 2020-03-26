@@ -1,3 +1,6 @@
+import 'package:carros/pages/home_page.dart';
+import 'package:carros/service/login_service.dart';
+import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/app_button.dart';
 import 'package:carros/widgets/app_campo_texto.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +50,6 @@ class _LoginPageState extends State<LoginPage> {
             AppCampoTexto('Login', 'Informe seu login',
                 controller: _tLogin,
                 validator: _validateLogin,
-                keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 nextFocus: _focusSenha),
             SizedBox(height: 10),
@@ -65,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _onClickLogin() {
+  void _onClickLogin() async {
     bool formOk = _formKey.currentState.validate();
     if (!formOk) {
       return;
@@ -73,6 +75,15 @@ class _LoginPageState extends State<LoginPage> {
 
     String login = _tLogin.text;
     String senha = _tSenha.text;
+
+
+    bool ok = await LoginSerevice.login(login, senha);
+
+    if(ok) {
+      push(context, HomePage());
+    } else {
+      print("login incorreto");
+    }
   }
 
   String _validateLogin(String value) {
