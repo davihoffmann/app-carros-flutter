@@ -23,50 +23,47 @@ class LoginPage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          TextFormField(
-            style: TextStyle(
-              fontSize: 25,
-              color: Colors.blue,
-            ),
-            decoration: InputDecoration(
-              labelText: 'Login',
-              labelStyle: TextStyle(
-                fontSize: 25,
-              ),
-              hintText: 'Digite o Login',
-            ),
-          ),
+          _campoTexto('Login', 'Informe seu login'),
           SizedBox(height: 10),
-          TextFormField(
-            style: TextStyle(
-              color: Colors.blue,
-              fontSize: 25,
-            ),
-            obscureText: true,
-            decoration: InputDecoration(
-              labelText: 'Senha',
-              labelStyle: TextStyle(
-                fontSize: 25,
-              ),
-              hintText: 'Digite a Senha',
-            ),
-          ),
+          _campoTexto('Senha', 'Informe sua senha', esconderTexto: true),
           SizedBox(height: 20),
-          Container(
-            height: 50,
-            child: RaisedButton(
-              color: Colors.blue,
-              child: Text(
-                'Logar',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                ),
-              ),
-              onPressed: () {},
-            ),
-          )
+          _botao('Login')
         ],
+      ),
+    );
+  }
+
+  Container _botao(String texto) {
+    return Container(
+      height: 50,
+      child: RaisedButton(
+        color: Colors.blue,
+        child: Text(
+          texto,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+          ),
+        ),
+        onPressed: () {},
+      ),
+    );
+  }
+
+  TextFormField _campoTexto(String label, String hint,
+      {bool esconderTexto = false}) {
+    return TextFormField(
+      obscureText: esconderTexto,
+      style: TextStyle(
+        fontSize: 25,
+        color: Colors.blue,
+      ),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(
+          fontSize: 25,
+        ),
+        hintText: hint,
       ),
     );
   }
