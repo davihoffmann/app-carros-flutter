@@ -1,4 +1,3 @@
-import 'package:carros/models/usuario.dart';
 import 'package:carros/pages/home_page.dart';
 import 'package:carros/service/api_response.dart';
 import 'package:carros/service/login_service.dart';
@@ -92,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
     ApiResponse response = await LoginSerevice.login(login, senha);
 
     if (response.ok) {
-      Usuario user = response.result;
+      //Usuario user = response.result;
       push(context, HomePage(), replace: true);
     } else {
       alert(context, response.msg);
