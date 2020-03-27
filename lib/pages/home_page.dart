@@ -16,12 +16,28 @@ class HomePage extends StatelessWidget {
   }
 
   _body() {
-    List<Carro> carros = CarroService.getCarros();
+    Future<List<Carro>> futureCarros = CarroService.getCarros();
 
+    return FutureBuilder(
+      future: futureCarros,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        List<Carro> carros = snapshot.data;
+        return _listaCarros(carros);
+      },
+    );
+  }
+
+  Container _listaCarros(List<Carro> carros) {
     return Container(
       padding: EdgeInsets.all(16),
       child: ListView.builder(
-        itemCount: carros.length,
+        itemCount: carros != null ? carros.length : 0,
         itemBuilder: (context, index) {
           Carro carro = carros[index];
 
