@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppButton extends StatelessWidget {
   final String texto;
   final Function onPressed;
-  bool showProgress;
+  final bool showProgress;
 
   AppButton(this.texto, {this.onPressed, this.showProgress = false});
 

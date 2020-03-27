@@ -1,98 +1,42 @@
 import 'package:carros/drawer_list.dart';
-import 'package:carros/models/carro.dart';
+import 'package:carros/pages/carros_list.dart';
 import 'package:carros/service/carro_service.dart';
+
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Carros'),
-      ),
-      body: _body(),
-      drawer: DrawerList(),
-    );
-  }
-
-  _body() {
-    Future<List<Carro>> futureCarros = CarroService.getCarros();
-
-    return FutureBuilder(
-      future: futureCarros,
-      builder: (context, snapshot) {
-
-        if (snapshot.hasError) {
-          return Center(
-            child: Text(
-              "Não foi possível buscar os carros!",
-              style: TextStyle(fontSize: 22, color: Colors.red),
-            ),
-          );
-        }
-
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        List<Carro> carros = snapshot.data;
-        return _listaCarros(carros);
-      },
-    );
-  }
-
-  Container _listaCarros(List<Carro> carros) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      child: ListView.builder(
-        itemCount: carros != null ? carros.length : 0,
-        itemBuilder: (context, index) {
-          Carro carro = carros[index];
-
-          return Card(
-            color: Colors.grey[100],
-            child: Container(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Center(
-                    child: Image.network(
-                      carro.urlFoto ?? "https://www.tribunadeituverava.com.br/wp-content/uploads/2017/12/sem-foto-sem-imagem-300x186.jpeg",
-                      width: 250,
-                    ),
-                  ),
-                  Text(
-                    carro.nome ?? "Sem nome",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 25),
-                  ),
-                  Text(
-                    "descriçao...",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  ButtonBar(
-                    children: <Widget>[
-                      FlatButton(
-                        child: const Text('DETALHES'),
-                        onPressed: () {/* ... */},
-                      ),
-                      FlatButton(
-                        child: const Text('SHARE'),
-                        onPressed: () {/* ... */},
-                      ),
-                    ],
-                  ),
-                ],
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Carros'),
+          bottom: TabBar(
+            tabs: [
+              Tab(
+                text: "Clássicos",
               ),
-            ),
-          );
-        },
+              Tab(
+                text: "Esportivo",
+              ),
+              Tab(
+                text: "Luxo",
+              ),
+            ],
+          ),
+        ),
+        body: TabBarView(children: [
+          CarrosList(TipoCarro.CLASSICO),
+          CarrosList(TipoCarro.ESPORTIVO),
+          CarrosList(TipoCarro.LUXO)
+        ]),
+        drawer: DrawerList(),
       ),
     );
   }
