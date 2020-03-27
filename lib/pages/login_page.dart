@@ -21,6 +21,8 @@ class _LoginPageState extends State<LoginPage> {
 
   final _focusSenha = FocusNode();
 
+  bool _showProgress = false;
+
   @override
   void initState() {
     super.initState();
@@ -63,7 +65,11 @@ class _LoginPageState extends State<LoginPage> {
                 keyboardType: TextInputType.number,
                 focusNode: _focusSenha),
             SizedBox(height: 20),
-            AppButton('Login', onPressed: _onClickLogin),
+            AppButton(
+              'Login',
+              onPressed: _onClickLogin,
+              showProgress: _showProgress,
+            )
           ],
         ),
       ),
@@ -79,14 +85,22 @@ class _LoginPageState extends State<LoginPage> {
     String login = _tLogin.text;
     String senha = _tSenha.text;
 
+    setState(() {
+      _showProgress = true;
+    });
+
     ApiResponse response = await LoginSerevice.login(login, senha);
 
-    if(response.ok) {
+    if (response.ok) {
       Usuario user = response.result;
-      push(context, HomePage());
+      push(context, HomePage(), replace: true);
     } else {
       alert(context, response.msg);
     }
+
+    setState(() {
+      _showProgress = false;
+    });
   }
 
   String _validateLogin(String value) {
