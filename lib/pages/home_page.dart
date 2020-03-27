@@ -21,6 +21,16 @@ class HomePage extends StatelessWidget {
     return FutureBuilder(
       future: futureCarros,
       builder: (context, snapshot) {
+
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              "Não foi possível buscar os carros!",
+              style: TextStyle(fontSize: 22, color: Colors.red),
+            ),
+          );
+        }
+
         if (!snapshot.hasData) {
           return Center(
             child: CircularProgressIndicator(),
@@ -50,12 +60,12 @@ class HomePage extends StatelessWidget {
                 children: <Widget>[
                   Center(
                     child: Image.network(
-                      carro.urlFoto,
+                      carro.urlFoto ?? "https://www.tribunadeituverava.com.br/wp-content/uploads/2017/12/sem-foto-sem-imagem-300x186.jpeg",
                       width: 250,
                     ),
                   ),
                   Text(
-                    carro.nome,
+                    carro.nome ?? "Sem nome",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 25),
