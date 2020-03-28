@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:carros/models/usuario.dart';
 import 'package:carros/pages/home_page.dart';
 import 'package:carros/service/api_response.dart';
@@ -14,14 +16,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _streamController = StreamController<bool>();
+
   final _formKey = GlobalKey<FormState>();
 
   final _tLogin = TextEditingController();
   final _tSenha = TextEditingController();
 
   final _focusSenha = FocusNode();
-
-  bool _showProgress = false;
 
   @override
   void initState() {
@@ -74,10 +76,16 @@ class _LoginPageState extends State<LoginPage> {
                 keyboardType: TextInputType.number,
                 focusNode: _focusSenha),
             SizedBox(height: 20),
-            AppButton(
-              'Login',
-              onPressed: _onClickLogin,
-              showProgress: _showProgress,
+            StreamBuilder<bool>(
+              stream: _streamController.stream,
+              initialData: false,
+              builder: (context, snapshot) {
+                return AppButton(
+                  'Login',
+                  onPressed: _onClickLogin,
+                  showProgress: snapshot.data,
+                );
+              }
             )
           ],
         ),
@@ -94,9 +102,7 @@ class _LoginPageState extends State<LoginPage> {
     String login = _tLogin.text;
     String senha = _tSenha.text;
 
-    setState(() {
-      _showProgress = true;
-    });
+    _streamController.add(true);
 
     ApiResponse response = await LoginSerevice.login(login, senha);
 
@@ -107,9 +113,7 @@ class _LoginPageState extends State<LoginPage> {
       alert(context, response.msg);
     }
 
-    setState(() {
-      _showProgress = false;
-    });
+    _streamController.add(false);
   }
 
   String _validateLogin(String value) {
@@ -132,5 +136,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     super.dispose();
+
+    _streamController.close();
   }
 }

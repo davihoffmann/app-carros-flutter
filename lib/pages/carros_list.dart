@@ -1,9 +1,12 @@
+import 'dart:async';
+
+import 'package:carros/pages/carro_page.dart';
+import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
 import 'package:carros/models/carro.dart';
 import 'package:carros/service/carro_service.dart';
 
 class CarrosList extends StatefulWidget {
-  
   final String tipo;
   CarrosList(this.tipo);
 
@@ -12,34 +15,49 @@ class CarrosList extends StatefulWidget {
 }
 
 class _CarrosListState extends State<CarrosList> with AutomaticKeepAliveClientMixin<CarrosList> {
+  
+  List<Carro> carros;
+  
+  final _streamController = StreamController<List<Carro>>();
 
   @override
   bool get wantKeepAlive => true;
 
   @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return _body();
+  void initState() {
+    super.initState();
+    _loadCarros();
   }
 
-  _body() {
-    Future<List<Carro>> futureCarros = CarroService.getCarros(widget.tipo);
+  _loadCarros() async {
+    List<Carro> carros = await CarroService.getCarros(widget.tipo);
 
-    // FutureBuilder Widget usado para manipular o resultado de uma Future
-    return FutureBuilder(
-      future: futureCarros,
+    _streamController.add(carros);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    // Utilizado para redesenhar pequenas partes da tela, sem necessidade de recarrgar todo o build
+    // Melhora o gerenciamento de estado da tela (observer)
+    // Programacao reativa
+    return StreamBuilder(
+      stream: _streamController.stream,
       builder: (context, snapshot) {
-
         if (snapshot.hasError) {
           return Center(
             child: Text(
-              "Não foi possível buscar os carros!",
-              style: TextStyle(fontSize: 22, color: Colors.red),
+              "Não foi possível buscar os carros",
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 22
+              ),
             ),
           );
         }
 
-        if (!snapshot.hasData) {
+        if(!snapshot.hasData) {
           return Center(
             child: CircularProgressIndicator(),
           );
@@ -68,12 +86,13 @@ class _CarrosListState extends State<CarrosList> with AutomaticKeepAliveClientMi
                 children: <Widget>[
                   Center(
                     child: Image.network(
-                      carro.urlFoto ?? "https://www.tribunadeituverava.com.br/wp-content/uploads/2017/12/sem-foto-sem-imagem-300x186.jpeg",
+                      carro.urlFoto ??
+                          "https://www.tribunadeituverava.com.br/wp-content/uploads/2017/12/sem-foto-sem-imagem-300x186.jpeg",
                       width: 250,
                     ),
                   ),
                   Text(
-                    carro.nome ?? "Sem nome",
+                    carro.nome ?? " - ",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 25),
@@ -88,7 +107,7 @@ class _CarrosListState extends State<CarrosList> with AutomaticKeepAliveClientMi
                     children: <Widget>[
                       FlatButton(
                         child: const Text('DETALHES'),
-                        onPressed: () {/* ... */},
+                        onPressed: () => _onClickCarro(carro),
                       ),
                       FlatButton(
                         child: const Text('SHARE'),
@@ -105,4 +124,14 @@ class _CarrosListState extends State<CarrosList> with AutomaticKeepAliveClientMi
     );
   }
 
+  _onClickCarro(Carro carro) {
+    push(context, CarroPage(carro));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _streamController.close();
+  }
 }

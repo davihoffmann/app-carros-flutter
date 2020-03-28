@@ -12,7 +12,6 @@ class TipoCarro {
 
 class CarroService {
   static Future<List<Carro>> getCarros(String tipo) async {
-
     Usuario user =  await Usuario.get();
 
     Map<String, String> headers = {
