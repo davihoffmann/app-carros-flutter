@@ -1,9 +1,7 @@
-import 'dart:async';
-
+import 'package:carros/bloc/login_bloc.dart';
 import 'package:carros/models/usuario.dart';
 import 'package:carros/pages/home_page.dart';
 import 'package:carros/service/api_response.dart';
-import 'package:carros/service/login_service.dart';
 import 'package:carros/utils/alert.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/app_button.dart';
@@ -16,7 +14,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _streamController = StreamController<bool>();
+  
+  final _bloc = LoginBloc();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -77,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                 focusNode: _focusSenha),
             SizedBox(height: 20),
             StreamBuilder<bool>(
-              stream: _streamController.stream,
+              stream: _bloc.buttonBloc.stream,
               initialData: false,
               builder: (context, snapshot) {
                 return AppButton(
@@ -102,9 +101,7 @@ class _LoginPageState extends State<LoginPage> {
     String login = _tLogin.text;
     String senha = _tSenha.text;
 
-    _streamController.add(true);
-
-    ApiResponse response = await LoginSerevice.login(login, senha);
+    ApiResponse response = await _bloc.login(login, senha);
 
     if (response.ok) {
       //Usuario user = response.result;
@@ -112,8 +109,6 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       alert(context, response.msg);
     }
-
-    _streamController.add(false);
   }
 
   String _validateLogin(String value) {
@@ -137,6 +132,6 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     super.dispose();
 
-    _streamController.close();
+    _bloc.dispose();
   }
 }

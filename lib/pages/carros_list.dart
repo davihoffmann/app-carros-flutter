@@ -1,10 +1,9 @@
-import 'dart:async';
-
+import 'package:carros/bloc/carros_bloc.dart';
 import 'package:carros/pages/carro_page.dart';
 import 'package:carros/utils/nav.dart';
+import 'package:carros/widgets/text_error.dart';
 import 'package:flutter/material.dart';
 import 'package:carros/models/carro.dart';
-import 'package:carros/service/carro_service.dart';
 
 class CarrosList extends StatefulWidget {
   final String tipo;
@@ -18,7 +17,7 @@ class _CarrosListState extends State<CarrosList> with AutomaticKeepAliveClientMi
   
   List<Carro> carros;
   
-  final _streamController = StreamController<List<Carro>>();
+  final _bloc = CarrosBloc();
 
   @override
   bool get wantKeepAlive => true;
@@ -26,13 +25,8 @@ class _CarrosListState extends State<CarrosList> with AutomaticKeepAliveClientMi
   @override
   void initState() {
     super.initState();
-    _loadCarros();
-  }
 
-  _loadCarros() async {
-    List<Carro> carros = await CarroService.getCarros(widget.tipo);
-
-    _streamController.add(carros);
+    _bloc.fetch(widget.tipo);
   }
 
   @override
@@ -43,18 +37,10 @@ class _CarrosListState extends State<CarrosList> with AutomaticKeepAliveClientMi
     // Melhora o gerenciamento de estado da tela (observer)
     // Programacao reativa
     return StreamBuilder(
-      stream: _streamController.stream,
+      stream: _bloc.stream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Center(
-            child: Text(
-              "Não foi possível buscar os carros",
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 22
-              ),
-            ),
-          );
+          return TextError("Não foi possível buscar os carros!");
         }
 
         if(!snapshot.hasData) {
@@ -132,6 +118,6 @@ class _CarrosListState extends State<CarrosList> with AutomaticKeepAliveClientMi
   void dispose() {
     super.dispose();
 
-    _streamController.close();
+    _bloc.dispose();
   }
 }
