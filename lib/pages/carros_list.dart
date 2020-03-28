@@ -25,6 +25,7 @@ class _CarrosListState extends State<CarrosList> with AutomaticKeepAliveClientMi
   _body() {
     Future<List<Carro>> futureCarros = CarroService.getCarros(widget.tipo);
 
+    // FutureBuilder Widget usado para manipular o resultado de uma Future
     return FutureBuilder(
       future: futureCarros,
       builder: (context, snapshot) {

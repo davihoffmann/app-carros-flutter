@@ -1,3 +1,4 @@
+import 'package:carros/models/usuario.dart';
 import 'package:carros/pages/login_page.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
@@ -5,18 +6,19 @@ import 'package:flutter/material.dart';
 class DrawerList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Future<Usuario> future = Usuario.get();
+
     return SafeArea(
       child: Drawer(
         child: ListView(
           children: <Widget>[
-            UserAccountsDrawerHeader(
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://avatars0.githubusercontent.com/u/5316112?s=460&u=99fadd40fba9d24786f9fc5682eeb267e3827350&v=4"),
-              ),
-              accountName: Text("Davi Prada Hoffmann"),
-              accountEmail: Text("davi.phoffmann@gmail.com"),
-            ),
+            FutureBuilder<Usuario>(
+                future: future,
+                builder: (context, snapshot) {
+                  Usuario usuario = snapshot.data;
+
+                  return usuario != null ? _userHeader(usuario) : Container();
+                }),
             ListTile(
               leading: Icon(Icons.star),
               title: Text('Favoritos'),
@@ -48,8 +50,20 @@ class DrawerList extends StatelessWidget {
     );
   }
 
+  UserAccountsDrawerHeader _userHeader(Usuario user) {
+    return UserAccountsDrawerHeader(
+      currentAccountPicture: CircleAvatar(
+        backgroundImage: NetworkImage(user.urlFoto),
+      ),
+      accountName: Text(user.nome),
+      accountEmail: Text(user.email),
+    );
+  }
+
   _onClickLogout(BuildContext context) {
+    Usuario.clear();
     Navigator.pop(context);
     push(context, LoginPage(), replace: true);
   }
+  
 }

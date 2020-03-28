@@ -1,3 +1,4 @@
+import 'package:carros/models/usuario.dart';
 import 'package:carros/pages/home_page.dart';
 import 'package:carros/service/api_response.dart';
 import 'package:carros/service/login_service.dart';
@@ -25,6 +26,15 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+
+    Future<Usuario> future = Usuario.get();
+    future.then((Usuario user) {
+      if (user != null) {
+        setState(() {
+          push(context, HomePage(), replace: true);
+        });
+      }
+    });
   }
 
   @override
