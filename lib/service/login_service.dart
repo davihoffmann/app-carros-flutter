@@ -16,8 +16,8 @@ class LoginSerevice {
       var response =
           await http.post(url, body: json.encode(params), headers: headers);
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      //print('Response status: ${response.statusCode}');
+      //print('Response body: ${response.body}');
 
       Map mapResponse = json.decode(response.body);
 
