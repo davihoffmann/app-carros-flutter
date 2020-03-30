@@ -13,7 +13,7 @@ class CarrosPage extends StatefulWidget {
 }
 
 class _CarrosPageState extends State<CarrosPage> with AutomaticKeepAliveClientMixin<CarrosPage> {
-  List<Carro> carros;
+  String get tipo => widget.tipo;
 
   final _bloc = CarrosBloc();
 
@@ -48,9 +48,17 @@ class _CarrosPageState extends State<CarrosPage> with AutomaticKeepAliveClientMi
         }
 
         List<Carro> carros = snapshot.data;
-        return CarrosList(carros);
+
+        return RefreshIndicator(
+          onRefresh: _onRefresh,
+          child: CarrosList(carros),
+        );
       },
     );
+  }
+
+  Future<void> _onRefresh() {
+    return _bloc.fetch(tipo);
   }
 
   @override
@@ -59,4 +67,5 @@ class _CarrosPageState extends State<CarrosPage> with AutomaticKeepAliveClientMi
 
     _bloc.dispose();
   }
+
 }

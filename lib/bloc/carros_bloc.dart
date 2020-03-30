@@ -9,13 +9,17 @@ import 'package:carros/service/carro_service.dart';
 class CarrosBloc extends SimpleBloc<List<Carro>> {
   
   // Busca os carros da API
-  fetch(String tipo) async {
+  Future<List<Carro>> fetch(String tipo) async {
     try {
       List<Carro> carros = await CarroService.getCarros(tipo);
 
       add(carros);
+
+      return carros;
     } catch(e) {
       addError(e);
+      List<Carro> carros = [];
+      return carros;
     }
   }
 

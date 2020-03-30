@@ -20,6 +20,9 @@ class CarroService {
     };
 
     var url = 'https://carros-springboot.herokuapp.com/api/v2/carros/tipo/$tipo';
+
+    print("GET > $url");
+
     var response = await http.get(url, headers: headers);
 
     List list = json.decode(response.body);
