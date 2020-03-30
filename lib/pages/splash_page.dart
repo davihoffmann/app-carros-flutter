@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
 
     // Usuario
     Future<Usuario> futureC = Usuario.get();
- 
+
     Future.wait([futureA, futureB, futureC]).then((List values) {
       Usuario user = values[2];
       if (user != null) {
@@ -40,10 +40,6 @@ class _SplashPageState extends State<SplashPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Center(
-            child: Image.network('https://unidavi-site-assets.s3-sa-east-1.amazonaws.com/sistemas-admin/images/logo.png'),
-          ),
-          SizedBox(height: 15,),
           Center(
             child: CircularProgressIndicator(),
           ),

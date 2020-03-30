@@ -18,7 +18,7 @@ class TextError extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.red,
-              fontSize: 22,
+              fontSize: 16,
             ),
           ),
         ],

@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carros/bloc/loripsum_bloc.dart';
 import 'package:carros/models/carro.dart';
 import 'package:carros/widgets/text_component.dart';
+import 'package:carros/widgets/text_error.dart';
 import 'package:flutter/material.dart';
 
 class TipoAcao {
@@ -65,7 +67,13 @@ class _CarroPageState extends State<CarroPage> {
       padding: EdgeInsets.all(16),
       child: ListView(
         children: <Widget>[
-          Image.network(widget.carro.urlFoto),
+          CachedNetworkImage(
+            imageUrl: widget.carro.urlFoto ??
+                'http://www.tribunadeituverava.com.br/wp-content/uploads/2017/12/sem-foto-sem-imagem.jpeg',
+            width: 250,
+            placeholder: (context, url) => CircularProgressIndicator(),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+          ),
           _bloco01(),
           Divider(),
           _bloco02()
@@ -110,19 +118,38 @@ class _CarroPageState extends State<CarroPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        SizedBox(height: 20,),
-        TextComponent(widget.carro.descricao, fontSize: 16, bold: true,),
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
+        TextComponent(
+          widget.carro.descricao,
+          fontSize: 16,
+          bold: true,
+        ),
+        SizedBox(
+          height: 20,
+        ),
         // 2 - a Stream fica escutando se há modificações, caso ocorra, faz alteração somente da área que esta referênciada
         StreamBuilder(
           stream: _loripsumBloc.stream,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if(!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator(),);
+            if (snapshot.hasError) {
+              return TextError(
+                "Não foi possível carregar os dados!",
+              );
+            }
+
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             }
 
             // 3 - Adicionado o resultado da strem atualizada ao componete da tela
-            return TextComponent(snapshot.data, fontSize: 16,);
+            return TextComponent(
+              snapshot.data,
+              fontSize: 16,
+            );
           },
         )
         /*
