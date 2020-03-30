@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:carros/controller/carro_dao.dart';
 import 'package:carros/models/carro.dart';
 import 'package:carros/models/usuario.dart';
 import 'package:http/http.dart' as http;
@@ -27,6 +28,12 @@ class CarroService {
 
     List list = json.decode(response.body);
 
-    return list.map<Carro>((map) => Carro.fromJson(map)).toList();
+    List<Carro> carros = list.map<Carro>((map) => Carro.fromJson(map)).toList();
+
+    final dao = CarroDAO();
+    // Salvar os carros no banco de dados SQLITE
+    carros.forEach((c) => dao.save(c));
+
+    return carros;
   }
 }
