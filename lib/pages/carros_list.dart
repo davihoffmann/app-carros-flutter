@@ -1,61 +1,15 @@
-import 'package:carros/bloc/carros_bloc.dart';
 import 'package:carros/pages/carro_page.dart';
 import 'package:carros/utils/nav.dart';
-import 'package:carros/widgets/text_error.dart';
 import 'package:flutter/material.dart';
 import 'package:carros/models/carro.dart';
 
-class CarrosList extends StatefulWidget {
-  final String tipo;
-  CarrosList(this.tipo);
+class CarrosList extends StatelessWidget {
+  final List<Carro> carros;
 
-  @override
-  _CarrosListState createState() => _CarrosListState();
-}
-
-class _CarrosListState extends State<CarrosList> with AutomaticKeepAliveClientMixin<CarrosList> {
-  
-  List<Carro> carros;
-  
-  final _bloc = CarrosBloc();
-
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _bloc.fetch(widget.tipo);
-  }
+  CarrosList(this.carros);
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
-    // Utilizado para redesenhar pequenas partes da tela, sem necessidade de recarrgar todo o build
-    // Melhora o gerenciamento de estado da tela (observer)
-    // Programacao reativa
-    return StreamBuilder(
-      stream: _bloc.stream,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return TextError("Não foi possível buscar os carros!");
-        }
-
-        if(!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        List<Carro> carros = snapshot.data;
-        return _listaCarros(carros);
-      },
-    );
-  }
-
-  Container _listaCarros(List<Carro> carros) {
     return Container(
       padding: EdgeInsets.all(16),
       child: ListView.builder(
@@ -93,7 +47,7 @@ class _CarrosListState extends State<CarrosList> with AutomaticKeepAliveClientMi
                     children: <Widget>[
                       FlatButton(
                         child: const Text('DETALHES'),
-                        onPressed: () => _onClickCarro(carro),
+                        onPressed: () => _onClickCarro(context, carro),
                       ),
                       FlatButton(
                         child: const Text('SHARE'),
@@ -110,14 +64,7 @@ class _CarrosListState extends State<CarrosList> with AutomaticKeepAliveClientMi
     );
   }
 
-  _onClickCarro(Carro carro) {
+  _onClickCarro(BuildContext context, Carro carro) {
     push(context, CarroPage(carro));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    _bloc.dispose();
   }
 }

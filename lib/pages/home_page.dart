@@ -1,5 +1,5 @@
 import 'package:carros/drawer_list.dart';
-import 'package:carros/pages/carros_list.dart';
+import 'package:carros/pages/carros_page.dart';
 import 'package:carros/service/carro_service.dart';
 import 'package:carros/utils/prefs.dart';
 
@@ -66,9 +66,9 @@ class _HomePageState extends State<HomePage>
               child: CircularProgressIndicator(),
             )
           : TabBarView(controller: _tabController, children: [
-              CarrosList(TipoCarro.CLASSICO),
-              CarrosList(TipoCarro.ESPORTIVO),
-              CarrosList(TipoCarro.LUXO)
+              CarrosPage(TipoCarro.CLASSICO),
+              CarrosPage(TipoCarro.ESPORTIVO),
+              CarrosPage(TipoCarro.LUXO)
             ]),
       drawer: DrawerList(),
     );
