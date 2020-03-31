@@ -1,5 +1,6 @@
 import 'package:carros/drawer_list.dart';
 import 'package:carros/pages/carros_page.dart';
+import 'package:carros/pages/favoritos_page.dart';
 import 'package:carros/service/carro_service.dart';
 import 'package:carros/utils/prefs.dart';
 
@@ -25,7 +26,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
     // Depois cria o TabController
     // No método build na primeira vez ele poderá estar nulo
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
 
     // Agora que temos o TabController e o índice da tab,
     // chama o setState para redesenhar a tela
@@ -50,12 +51,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 tabs: [
                   Tab(
                     text: "Clássicos",
+                    icon: Icon(Icons.directions_car),
                   ),
                   Tab(
                     text: "Esportivo",
+                    icon: Icon(Icons.directions_car),
                   ),
                   Tab(
                     text: "Luxo",
+                    icon: Icon(Icons.directions_car),
+                  ),
+                  Tab(
+                    text: "Favoritos",
+                    icon: Icon(Icons.favorite),
                   ),
                 ],
               ),
@@ -67,7 +75,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           : TabBarView(controller: _tabController, children: [
               CarrosPage(TipoCarro.CLASSICO),
               CarrosPage(TipoCarro.ESPORTIVO),
-              CarrosPage(TipoCarro.LUXO)
+              CarrosPage(TipoCarro.LUXO),
+              FavoritosPage()
             ]),
       drawer: DrawerList(),
     );

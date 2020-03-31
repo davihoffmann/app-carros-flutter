@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carros/bloc/loripsum_bloc.dart';
 import 'package:carros/models/carro.dart';
+import 'package:carros/service/favorito_service.dart';
 import 'package:carros/widgets/text_component.dart';
 import 'package:carros/widgets/text_error.dart';
 import 'package:flutter/material.dart';
@@ -89,25 +90,27 @@ class _CarroPageState extends State<CarroPage> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            TextComponent(widget.carro.nome, fontSize: 25, bold: true),
+            TextComponent(widget.carro.nome, fontSize: 20, bold: true),
             TextComponent(widget.carro.tipo, color: Colors.grey, fontSize: 15)
           ],
         ),
         Row(
           children: <Widget>[
             IconButton(
-                icon: Icon(
-                  Icons.favorite,
-                  color: Colors.red,
-                  size: 40,
-                ),
-                onPressed: _onClickFavorito()),
+              icon: Icon(
+                Icons.favorite,
+                color: Colors.red,
+                size: 40,
+              ),
+              onPressed: _onClickFavorito,
+            ),
             IconButton(
-                icon: Icon(
-                  Icons.share,
-                  size: 40,
-                ),
-                onPressed: _onClickShare())
+              icon: Icon(
+                Icons.share,
+                size: 40,
+              ),
+              onPressed: _onClickShare,
+            )
           ],
         )
       ],
@@ -173,9 +176,12 @@ class _CarroPageState extends State<CarroPage> {
 
   _onClickPopupMenu(String value) {}
 
-  _onClickFavorito() {}
+  _onClickFavorito() async {
+    FavoritoService.favoritar(widget.carro);
+  }
 
-  _onClickShare() {}
+  _onClickShare() {
+  }
 
   @override
   void dispose() {
