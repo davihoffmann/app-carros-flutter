@@ -25,9 +25,17 @@ class _CarroPageState extends State<CarroPage> {
   // Declaração da classe bloc
   final _loripsumBloc = LoripsumBloc();
 
+  Color color = Colors.grey;
+
   @override
   void initState() {
     super.initState();
+
+    FavoritoService.isFavorito(widget.carro).then((favorito) {
+      setState(() {
+        color = favorito ? Colors.red :  Colors.grey;
+      });
+    });
 
     // 1 - Chama o metodo fetch, que faz a busca dos dados na api, e adiciona o resultado a stream
     _loripsumBloc.fetch();
@@ -99,7 +107,7 @@ class _CarroPageState extends State<CarroPage> {
             IconButton(
               icon: Icon(
                 Icons.favorite,
-                color: Colors.red,
+                color: color,
                 size: 40,
               ),
               onPressed: _onClickFavorito,
@@ -177,7 +185,11 @@ class _CarroPageState extends State<CarroPage> {
   _onClickPopupMenu(String value) {}
 
   _onClickFavorito() async {
-    FavoritoService.favoritar(widget.carro);
+    bool favorito = await FavoritoService.favoritar(widget.carro);
+
+    setState(() {
+      color = favorito ? Colors.red : Colors.grey;
+    });
   }
 
   _onClickShare() {
