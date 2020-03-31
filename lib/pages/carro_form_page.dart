@@ -115,7 +115,7 @@ class _CarroFormPageState extends State<CarroFormPage> {
   _headerFoto() {
     return carro != null
         ? CachedNetworkImage(
-            imageUrl: carro.urlFoto,
+            imageUrl: carro.urlFoto ?? 'http://www.tribunadeituverava.com.br/wp-content/uploads/2017/12/sem-foto-sem-imagem.jpeg',
           )
         : Image.asset(
             "assets/images/camera_icon.png",

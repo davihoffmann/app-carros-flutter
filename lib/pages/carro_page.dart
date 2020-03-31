@@ -2,7 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carros/bloc/loripsum_bloc.dart';
 import 'package:carros/models/carro.dart';
 import 'package:carros/pages/carro_form_page.dart';
+import 'package:carros/service/api_response.dart';
+import 'package:carros/service/carro_service.dart';
 import 'package:carros/service/favorito_service.dart';
+import 'package:carros/utils/alert.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/text_component.dart';
 import 'package:carros/widgets/text_error.dart';
@@ -35,7 +38,7 @@ class _CarroPageState extends State<CarroPage> {
 
     FavoritoService.isFavorito(widget.carro).then((favorito) {
       setState(() {
-        color = favorito ? Colors.red :  Colors.grey;
+        color = favorito ? Colors.red : Colors.grey;
       });
     });
 
@@ -185,8 +188,10 @@ class _CarroPageState extends State<CarroPage> {
   _onClickVideo() {}
 
   _onClickPopupMenu(String value) {
-    if(value == TipoAcao.EDITAR) {
+    if (value == TipoAcao.EDITAR) {
       push(context, CarroFormPage(carro: widget.carro));
+    } else if (value == TipoAcao.DELETAR) {
+      _deletar();
     }
   }
 
@@ -198,7 +203,18 @@ class _CarroPageState extends State<CarroPage> {
     });
   }
 
-  _onClickShare() {
+  _onClickShare() {}
+
+  void _deletar() async {
+    ApiResponse<bool> response = await CarroService.delete(widget.carro);
+
+    if(response.ok) {
+      alert(context, "Carro deletado com sucesso!", callback: () {
+         pop(context);
+      });
+    } else {
+      alert(context, response.msg);
+    }
   }
 
   @override
