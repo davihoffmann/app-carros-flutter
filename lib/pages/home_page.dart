@@ -1,7 +1,9 @@
 import 'package:carros/drawer_list.dart';
+import 'package:carros/pages/carro_form_page.dart';
 import 'package:carros/pages/carros_page.dart';
 import 'package:carros/pages/favoritos_page.dart';
 import 'package:carros/service/carro_service.dart';
+import 'package:carros/utils/nav.dart';
 import 'package:carros/utils/prefs.dart';
 
 import 'package:flutter/material.dart';
@@ -11,7 +13,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin<HomePage> {
   TabController _tabController;
 
   @override
@@ -79,6 +82,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               FavoritosPage()
             ]),
       drawer: DrawerList(),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: _onClickAdicionarCarro,
+      ),
     );
+  }
+
+  void _onClickAdicionarCarro() {
+    push(context, CarroFormPage());
   }
 }

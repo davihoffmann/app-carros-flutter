@@ -44,4 +44,10 @@ class Carro extends Entity {
     data['longitude'] = this.longitude;
     return data;
   }
+
+  @override
+  String toString() {
+    return "Carri(id: $id, nome: $nome, tipo: $tipo, descricao: $descricao, urlFoto: $urlFoto, urlVideo: $urlVideo, latitude: $latitude, longitude: $longitude)";
+  }
+
 }
