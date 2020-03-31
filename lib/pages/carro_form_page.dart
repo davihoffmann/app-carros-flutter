@@ -1,6 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carros/models/carro.dart';
+import 'package:carros/service/api_response.dart';
 import 'package:carros/service/carro_service.dart';
+import 'package:carros/utils/alert.dart';
+import 'package:carros/utils/nav.dart';
+import 'package:carros/widgets/app_button.dart';
+import 'package:carros/widgets/app_campo_texto.dart';
 import 'package:flutter/material.dart';
 
 class CarroFormPage extends StatefulWidget {
@@ -13,7 +18,6 @@ class CarroFormPage extends StatefulWidget {
 }
 
 class _CarroFormPageState extends State<CarroFormPage> {
-
   // Utilizado para fazer a validação do Formulario
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -83,34 +87,25 @@ class _CarroFormPageState extends State<CarroFormPage> {
           ),
           _radioTipo(),
           Divider(),
-          TextFormField(
+          AppCampoTexto(
+            'Nome',
+            '',
             controller: tNome,
             keyboardType: TextInputType.text,
             validator: _validateNome,
-            style: TextStyle(color: Colors.blue, fontSize: 20),
-            decoration: InputDecoration(hintText: '', labelText: 'Nome'),
           ),
-          TextFormField(
+          SizedBox(height: 25,),
+          AppCampoTexto(
+            'Descrição',
+            '',
             controller: tDesc,
             keyboardType: TextInputType.text,
-            style: TextStyle(color: Colors.blue, fontSize: 20),
-            decoration: InputDecoration(hintText: '', labelText: 'Descrição'),
           ),
-          Container(
-            height: 50,
-            margin: EdgeInsets.only(top: 20),
-            child: RaisedButton(
-              color: Colors.blue,
-              child: _showProgress
-                  ? CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    )
-                  : Text(
-                      "Salvar",
-                      style: TextStyle(color: Colors.white, fontSize: 22),
-                    ),
-              onPressed: _onClickSalvar,
-            ),
+          SizedBox(height: 25,),
+          AppButton(
+            "Salvar",
+            onPressed: _onClickSalvar,
+            showProgress: _showProgress,
           )
         ],
       ),
@@ -211,7 +206,17 @@ class _CarroFormPageState extends State<CarroFormPage> {
 
     print("Salvar o carro $c");
 
-    await Future.delayed(Duration(seconds: 3));
+    //await Future.delayed(Duration(seconds: 3));
+
+    ApiResponse<bool> response = await CarroService.save(c);
+
+    if(response.ok) {
+      alert(context, "Carro salvo com sucesso!", callback: () {
+         pop(context);
+      });
+    } else {
+      alert(context, response.msg);
+    }
 
     setState(() {
       _showProgress = false;
