@@ -32,6 +32,11 @@ dependencies:
   connectivity: ^0.4.8+2
   # Plugin para utilização da camera
   image_picker: ^0.6.4
+  # Plugin Provider, pode ser usado:
+  # 1 - como um provedor objetos, recuperar esse obejeto de qualquer lugar do código
+  # 2 - pode ser utilizado para ficar monitorando um modelo, como por exemplo a lista de carros favoritos (sem utilizar o StremBuilder),
+  #     caso for adicionado ou removido um, ele já retorna a lista atualizada quando execultado alguma acao sobre aquela lista
+  provider: ^4.0.4
 
 
   # The following adds the Cupertino Icons font to your application.

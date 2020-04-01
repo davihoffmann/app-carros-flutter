@@ -3,6 +3,7 @@ import 'package:carros/pages/carros_list.dart';
 import 'package:carros/widgets/text_error.dart';
 import 'package:flutter/material.dart';
 import 'package:carros/models/carro.dart';
+import 'package:provider/provider.dart';
 
 class FavoritosPage extends StatefulWidget {
   @override
@@ -10,8 +11,7 @@ class FavoritosPage extends StatefulWidget {
 }
 
 class _FavoritosPageState extends State<FavoritosPage> with AutomaticKeepAliveClientMixin<FavoritosPage> {
-  final _bloc = FavoritoBloc();
-
+  
   @override
   bool get wantKeepAlive => true;
 
@@ -19,18 +19,21 @@ class _FavoritosPageState extends State<FavoritosPage> with AutomaticKeepAliveCl
   void initState() {
     super.initState();
 
-    _bloc.fetch();
+    FavoritoBloc favoritosBloc = Provider.of<FavoritoBloc>(context, listen: false);
+    favoritosBloc.fetch();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
+    FavoritoBloc favoritosBloc = Provider.of<FavoritoBloc>(context);
+
     // Utilizado para redesenhar pequenas partes da tela, sem necessidade de recarrgar todo o build
     // Melhora o gerenciamento de estado da tela (observer)
     // Programacao reativa
     return StreamBuilder(
-      stream: _bloc.stream,
+      stream: favoritosBloc.stream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return TextError("Não foi possível buscar os carros!");
@@ -53,14 +56,9 @@ class _FavoritosPageState extends State<FavoritosPage> with AutomaticKeepAliveCl
   }
 
   Future<void> _onRefresh() {
-    return _bloc.fetch();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    _bloc.dispose();
+    FavoritoBloc favoritosBloc = Provider.of<FavoritoBloc>(context, listen: false);
+    
+    return favoritosBloc.fetch();
   }
 
 }
