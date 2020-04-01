@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carros/models/carro.dart';
 import 'package:carros/service/api_response.dart';
@@ -7,6 +9,7 @@ import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/app_button.dart';
 import 'package:carros/widgets/app_campo_texto.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CarroFormPage extends StatefulWidget {
   final Carro carro;
@@ -28,6 +31,8 @@ class _CarroFormPageState extends State<CarroFormPage> {
   int _radioIndex = 0;
 
   var _showProgress = false;
+
+  File _file;
 
   Carro get carro => widget.carro;
 
@@ -94,14 +99,18 @@ class _CarroFormPageState extends State<CarroFormPage> {
             keyboardType: TextInputType.text,
             validator: _validateNome,
           ),
-          SizedBox(height: 25,),
+          SizedBox(
+            height: 25,
+          ),
           AppCampoTexto(
             'Descrição',
             '',
             controller: tDesc,
             keyboardType: TextInputType.text,
           ),
-          SizedBox(height: 25,),
+          SizedBox(
+            height: 25,
+          ),
           AppButton(
             "Salvar",
             onPressed: _onClickSalvar,
@@ -113,14 +122,20 @@ class _CarroFormPageState extends State<CarroFormPage> {
   }
 
   _headerFoto() {
-    return carro != null
-        ? CachedNetworkImage(
-            imageUrl: carro.urlFoto ?? 'http://www.tribunadeituverava.com.br/wp-content/uploads/2017/12/sem-foto-sem-imagem.jpeg',
-          )
-        : Image.asset(
-            "assets/images/camera_icon.png",
-            height: 150,
-          );
+    return InkWell(
+      onTap: _onClickFoto,
+      child: this._file != null
+          ? Image.file(_file, height: 150,)
+          : carro != null
+              ? CachedNetworkImage(
+                  imageUrl: carro.urlFoto ??
+                      'http://www.tribunadeituverava.com.br/wp-content/uploads/2017/12/sem-foto-sem-imagem.jpeg',
+                )
+              : Image.asset(
+                  "assets/images/camera_icon.png",
+                  height: 150,
+                ),
+    );
   }
 
   _radioTipo() {
@@ -186,6 +201,15 @@ class _CarroFormPageState extends State<CarroFormPage> {
     }
   }
 
+  void _onClickFoto() async {
+    File file = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (file != null) {
+      setState(() {
+        this._file = file;
+      });
+    }
+  }
+
   _onClickSalvar() async {
     // Utilizando o formkey chama o validate do formulario, que vai chamar o validate de cada campo
     if (!_formKey.currentState.validate()) {
@@ -208,11 +232,11 @@ class _CarroFormPageState extends State<CarroFormPage> {
 
     //await Future.delayed(Duration(seconds: 3));
 
-    ApiResponse<bool> response = await CarroService.save(c);
+    ApiResponse<bool> response = await CarroService.save(c, _file);
 
-    if(response.ok) {
+    if (response.ok) {
       alert(context, "Carro salvo com sucesso!", callback: () {
-         pop(context);
+        pop(context);
       });
     } else {
       alert(context, response.msg);

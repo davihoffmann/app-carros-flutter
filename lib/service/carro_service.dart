@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:carros/models/carro.dart';
 import 'package:carros/service/api_response.dart';
 import 'package:carros/service/http_base.dart' as http;
+import 'package:carros/service/upload_service.dart';
 
 class TipoCarro {
   static const String CLASSICO = "classicos";
@@ -25,8 +27,16 @@ class CarroService {
     return carros;
   }
 
-  static Future<ApiResponse<bool>> save(Carro carro) async {
+  static Future<ApiResponse<bool>> save(Carro carro, File file) async {
     try {
+
+      if(file != null) {
+        ApiResponse<String> response = await UploadService.upload(file);
+        if(response.ok) {
+          carro.urlFoto = response.result;
+        }
+      }
+
       bool isUpdate = carro.id != null;
 
       var url = 'https://carros-springboot.herokuapp.com/api/v2/carros';
