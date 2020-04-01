@@ -21,7 +21,7 @@ class DrawerList extends StatelessWidget {
                 }),
             ListTile(
               leading: Icon(Icons.star),
-              title: Text('Favoritoss'),
+              title: Text('Favoritos'),
               subtitle: Text('mais informaçoes...'),
               trailing: Icon(Icons.arrow_forward_ios),
               onTap: () {

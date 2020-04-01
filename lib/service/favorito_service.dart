@@ -1,5 +1,4 @@
-
-import 'package:carros/bloc/favorito_bloc.dart';
+import 'package:carros/bloc/favoritos_model.dart';
 import 'package:carros/controller/carro_dao.dart';
 import 'package:carros/controller/favorito_dao.dart';
 import 'package:carros/models/carro.dart';
@@ -18,13 +17,13 @@ class FavoritoService {
       // deleta dos favoritos
       dao.delete(carro.id);
 
-      Provider.of<FavoritoBloc>(context, listen: false).fetch();
+      Provider.of<FavoritosModel>(context, listen: false).getCarros();
 
       return false;
     } else {
       //adiciona nos favoritos
       dao.save(favorito);
-      Provider.of<FavoritoBloc>(context, listen: false).fetch();
+      Provider.of<FavoritosModel>(context, listen: false).getCarros();
 
       return true;
     }

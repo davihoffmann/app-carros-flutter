@@ -1,6 +1,5 @@
-import 'package:carros/bloc/favorito_bloc.dart';
+import 'package:carros/bloc/favoritos_model.dart';
 import 'package:carros/pages/carros_list.dart';
-import 'package:carros/widgets/text_error.dart';
 import 'package:flutter/material.dart';
 import 'package:carros/models/carro.dart';
 import 'package:provider/provider.dart';
@@ -10,8 +9,8 @@ class FavoritosPage extends StatefulWidget {
   _FavoritosPageState createState() => _FavoritosPageState();
 }
 
-class _FavoritosPageState extends State<FavoritosPage> with AutomaticKeepAliveClientMixin<FavoritosPage> {
-  
+class _FavoritosPageState extends State<FavoritosPage>
+    with AutomaticKeepAliveClientMixin<FavoritosPage> {
   @override
   bool get wantKeepAlive => true;
 
@@ -19,46 +18,36 @@ class _FavoritosPageState extends State<FavoritosPage> with AutomaticKeepAliveCl
   void initState() {
     super.initState();
 
-    FavoritoBloc favoritosBloc = Provider.of<FavoritoBloc>(context, listen: false);
-    favoritosBloc.fetch();
+    FavoritosModel model = Provider.of<FavoritosModel>(context, listen: false);
+    model.getCarros();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    FavoritoBloc favoritosBloc = Provider.of<FavoritoBloc>(context);
+    FavoritosModel model = Provider.of<FavoritosModel>(context);
 
-    // Utilizado para redesenhar pequenas partes da tela, sem necessidade de recarrgar todo o build
-    // Melhora o gerenciamento de estado da tela (observer)
-    // Programacao reativa
-    return StreamBuilder(
-      stream: favoritosBloc.stream,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return TextError("Não foi possível buscar os carros!");
-        }
+    List<Carro> carros = model.carros;
 
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+    if (carros.isEmpty) {
+      return Center(
+        child: Text(
+          "Nenhum carro nos favoritos!",
+          style: TextStyle(fontSize: 25),
+        ),
+      );
+    }
 
-        List<Carro> carros = snapshot.data;
-
-        return RefreshIndicator(
-          onRefresh: _onRefresh,
-          child: CarrosList(carros),
-        );
-      },
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: CarrosList(carros),
     );
   }
 
   Future<void> _onRefresh() {
-    FavoritoBloc favoritosBloc = Provider.of<FavoritoBloc>(context, listen: false);
-    
-    return favoritosBloc.fetch();
-  }
+    FavoritosModel model = Provider.of<FavoritosModel>(context, listen: false);
 
+    return model.getCarros();
+  }
 }
