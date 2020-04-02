@@ -7,18 +7,18 @@ import 'package:carros/service/login_service.dart';
 
 class LoginBloc {
 
-  final buttonBloc = SimpleBloc<bool>();
+  final boolBloc = SimpleBloc<bool>();
 
   //Faz a chamada do login no service
   Future<ApiResponse<Usuario>> login(String login, String senha) async {
-    buttonBloc.add(true);
+    boolBloc.add(true);
     ApiResponse response = await LoginSerevice.login(login, senha);
-    buttonBloc.add(false);
+    boolBloc.add(false);
 
     return response;
   }
 
   void dispose() {
-    buttonBloc.dispose();
+    boolBloc.dispose();
   }
 }

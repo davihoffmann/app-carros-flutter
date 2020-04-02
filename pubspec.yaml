@@ -37,6 +37,8 @@ dependencies:
   # 2 - pode ser utilizado para ficar monitorando um modelo, como por exemplo a lista de carros favoritos (sem utilizar o StremBuilder),
   #     caso for adicionado ou removido um, ele já retorna a lista atualizada quando execultado alguma acao sobre aquela lista
   provider: ^4.0.4
+  # Plugin para compartilhamento de conteudo
+  share: ^0.6.3+6
 
 
   # The following adds the Cupertino Icons font to your application.

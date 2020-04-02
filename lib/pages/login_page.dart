@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                 focusNode: _focusSenha),
             SizedBox(height: 20),
             StreamBuilder<bool>(
-              stream: _bloc.buttonBloc.stream,
+              stream: _bloc.boolBloc.stream,
               initialData: false,
               builder: (context, snapshot) {
                 return AppButton(
