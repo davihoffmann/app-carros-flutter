@@ -1,6 +1,6 @@
-import 'package:carros/drawer_list.dart';
 import 'package:carros/pages/carro_form_page.dart';
 import 'package:carros/pages/carros_page.dart';
+import 'package:carros/pages/drawer_list.dart';
 import 'package:carros/pages/favoritos_page.dart';
 import 'package:carros/service/carro_service.dart';
 import 'package:carros/utils/nav.dart';
