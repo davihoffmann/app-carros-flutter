@@ -41,6 +41,8 @@ dependencies:
   share: ^0.6.3+6
   # Plugin utilizado para abrir um url dentro do app
   url_launcher: ^5.4.2
+  # Plugin que adicionar um player de video
+  video_player: ^0.10.8+1
 
 
   # The following adds the Cupertino Icons font to your application.

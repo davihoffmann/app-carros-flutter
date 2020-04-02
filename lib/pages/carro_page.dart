@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carros/bloc/loripsum_bloc.dart';
 import 'package:carros/models/carro.dart';
 import 'package:carros/pages/carro_form_page.dart';
+import 'package:carros/pages/video_page.dart';
 import 'package:carros/service/api_response.dart';
 import 'package:carros/service/carro_service.dart';
 import 'package:carros/service/favorito_service.dart';
@@ -11,7 +12,6 @@ import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/text_component.dart';
 import 'package:carros/widgets/text_error.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class TipoAcao {
   static const String EDITAR = "editar";
@@ -189,7 +189,8 @@ class _CarroPageState extends State<CarroPage> {
 
   _onClickVideo(BuildContext context) {
     if(widget.carro.urlVideo != null && widget.carro.urlVideo.isNotEmpty) {
-      launch(widget.carro.urlVideo);
+      //launch(widget.carro.urlVideo);
+      push(context, VideoPage(widget.carro));
     } else {
       alert(context, "Erro!", "Este carro não possui nenhum video");
     }
