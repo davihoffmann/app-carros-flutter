@@ -211,7 +211,7 @@ class _CarroPageState extends State<CarroPage> {
 
     if(response.ok) {
       alert(context, "Carro deletado com sucesso!", callback: () {
-        EventBus.get(context).sendEvent("carro_deletado");
+        EventBus.get(context).sendEvent(CarroEvent("carro_deletado", widget.carro.tipo));
         
         pop(context);
       });

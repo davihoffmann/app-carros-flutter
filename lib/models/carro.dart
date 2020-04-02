@@ -1,6 +1,22 @@
 import 'dart:convert';
 
 import 'package:carros/models/entity.dart';
+import 'package:carros/utils/event_bus.dart';
+
+class CarroEvent extends Event {
+  // salvar, deletar
+  final String acao;
+
+  // classico, esportivo, luxo
+  final String tipo;
+
+  CarroEvent(this.acao, this.tipo);
+
+  @override
+  String toString() {
+    return "CarroEvent(acao: $acao, tipo: $tipo)";
+  }
+}
 
 class Carro extends Entity {
   int id;

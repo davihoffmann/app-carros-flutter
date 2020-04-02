@@ -237,7 +237,7 @@ class _CarroFormPageState extends State<CarroFormPage> {
 
     if (response.ok) {
       alert(context, "Carro salvo com sucesso!", callback: () {
-        EventBus.get(context).sendEvent("carro_cadastrado");
+        EventBus.get(context).sendEvent(CarroEvent("carro_cadastrado", c.tipo));
         pop(context);
       });
     } else {

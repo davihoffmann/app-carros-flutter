@@ -16,7 +16,7 @@ class CarrosPage extends StatefulWidget {
 }
 
 class _CarrosPageState extends State<CarrosPage> with AutomaticKeepAliveClientMixin<CarrosPage> {
-  StreamSubscription<String> subscription;
+  StreamSubscription<Event> subscription;
 
   String get tipo => widget.tipo;
 
@@ -33,10 +33,14 @@ class _CarrosPageState extends State<CarrosPage> with AutomaticKeepAliveClientMi
 
     // Escutando uma stream
     final bus = EventBus.get(context);
-    subscription = bus.stream.listen((String s) {
-      print("event > $s");
-      // Atualiza a lista de carros, independente do evento (create, update, delete)
-      _bloc.fetch(tipo);
+    subscription = bus.stream.listen((Event e) {
+      print("event > $e");
+      CarroEvent carroEvent = e;
+      // Se a aba do evento for a mesma aba que esta aberta, executa a atualizacao da lista
+      if(carroEvent.tipo == tipo) {
+        // Atualiza a lista de carros
+        _bloc.fetch(tipo);
+      }
     });
   }
 
