@@ -43,6 +43,8 @@ dependencies:
   url_launcher: ^5.4.2
   # Plugin que adicionar um player de video
   video_player: ^0.10.8+1
+  # Plugin do Google Maps
+  google_maps_flutter: ^0.5.25+3
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carros/bloc/loripsum_bloc.dart';
 import 'package:carros/models/carro.dart';
 import 'package:carros/pages/carro_form_page.dart';
+import 'package:carros/pages/mapa_page.dart';
 import 'package:carros/pages/video_page.dart';
 import 'package:carros/service/api_response.dart';
 import 'package:carros/service/carro_service.dart';
@@ -56,7 +57,7 @@ class _CarroPageState extends State<CarroPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.place),
-            onPressed: _onClickMap,
+            onPressed: () => _onClickMap(context),
           ),
           IconButton(
             icon: Icon(Icons.video_call),
@@ -185,7 +186,13 @@ class _CarroPageState extends State<CarroPage> {
     );
   }
 
-  _onClickMap() {}
+  _onClickMap(BuildContext context) {
+    if(widget.carro.latitude != null && widget.carro.longitude != null) {
+      push(context, MapaPage(widget.carro));
+    } else {
+      alert(context, "Erro!", "Este carro não possui latitude ou longitude video");
+    }
+  }
 
   _onClickVideo(BuildContext context) {
     if(widget.carro.urlVideo != null && widget.carro.urlVideo.isNotEmpty) {
