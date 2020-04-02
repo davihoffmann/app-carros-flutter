@@ -24,7 +24,7 @@ class CarrosList extends StatelessWidget {
               padding: EdgeInsets.all(10),
               child: InkWell(
                 onTap: () => _onClickCarro(context, carro),
-                onLongPress: () => _onLongClickCarro(context, carro),
+                onLongPress: () => _onLongClickCarroModalBottomSheet(context, carro),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -76,6 +76,7 @@ class CarrosList extends StatelessWidget {
     push(context, CarroPage(carro));
   }
 
+  /*
   _onLongClickCarro(BuildContext context, Carro carro) {
     showDialog(
         context: context,
@@ -83,6 +84,44 @@ class CarrosList extends StatelessWidget {
           return SimpleDialog(
             title: Text(carro.nome),
             children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.directions_car),
+                title: Text("Detalhes"),
+                onTap: () {
+                  pop(context);
+                  _onClickCarro(context, carro);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.share),
+                title: Text("Share"),
+                onTap: () {
+                  pop(context);
+                  _onClickShare(context, carro);
+                },
+              )
+            ],
+          );
+        });
+  }*/
+
+  _onLongClickCarroModalBottomSheet(BuildContext context, Carro carro) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.all(20),
+                child: Text(
+                  carro.nome,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+              ),
               ListTile(
                 leading: Icon(Icons.directions_car),
                 title: Text("Detalhes"),
