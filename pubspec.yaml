@@ -39,6 +39,8 @@ dependencies:
   provider: ^4.0.4
   # Plugin para compartilhamento de conteudo
   share: ^0.6.3+6
+  # Plugin utilizado para abrir um url dentro do app
+  url_launcher: ^5.4.2
 
 
   # The following adds the Cupertino Icons font to your application.

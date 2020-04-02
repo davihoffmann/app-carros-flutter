@@ -11,6 +11,7 @@ import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/text_component.dart';
 import 'package:carros/widgets/text_error.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TipoAcao {
   static const String EDITAR = "editar";
@@ -59,7 +60,7 @@ class _CarroPageState extends State<CarroPage> {
           ),
           IconButton(
             icon: Icon(Icons.video_call),
-            onPressed: _onClickVideo,
+            onPressed: () => _onClickVideo(context),
           ),
           PopupMenuButton<String>(
             onSelected: (String value) => _onClickPopupMenu(value),
@@ -186,7 +187,13 @@ class _CarroPageState extends State<CarroPage> {
 
   _onClickMap() {}
 
-  _onClickVideo() {}
+  _onClickVideo(BuildContext context) {
+    if(widget.carro.urlVideo != null && widget.carro.urlVideo.isNotEmpty) {
+      launch(widget.carro.urlVideo);
+    } else {
+      alert(context, "Erro!", "Este carro não possui nenhum video");
+    }
+  }
 
   _onClickPopupMenu(String value) {
     if (value == TipoAcao.EDITAR) {
@@ -210,13 +217,13 @@ class _CarroPageState extends State<CarroPage> {
     ApiResponse<bool> response = await CarroService.delete(widget.carro);
 
     if(response.ok) {
-      alert(context, "Carro deletado com sucesso!", callback: () {
+      alert(context, "Sucesso!", "Carro deletado com sucesso!", callback: () {
         EventBus.get(context).sendEvent(CarroEvent("carro_deletado", widget.carro.tipo));
         
         pop(context);
       });
     } else {
-      alert(context, response.msg);
+      alert(context, "Erro!", response.msg);
     }
   }
 

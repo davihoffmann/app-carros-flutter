@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
       //Usuario user = response.result;
       push(context, HomePage(), replace: true);
     } else {
-      alert(context, response.msg);
+      alert(context, "Erro!", response.msg);
     }
   }
 
