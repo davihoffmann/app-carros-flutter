@@ -26,8 +26,8 @@ class Usuario {
     email = json['email'];
     urlFoto = json['urlFoto'];
     token = json['token'];
-    roles = json['roles'].cast<String>();
-    //roles = map["roles"] != null ? map["roles"].map<String>((role) => role.toString()).toList() : null;
+    //roles = json['roles'].cast<String>();
+    roles = json["roles"] != null ? json["roles"].map<String>((role) => role.toString()).toList() : null;
   }
 
   Map<String, dynamic> toJson() {

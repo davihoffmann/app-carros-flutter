@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "419133560440",
+    "firebase_url": "https://carros-e5028.firebaseio.com",
+    "project_id": "carros-e5028",
+    "storage_bucket": "carros-e5028.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419133560440:android:fc9ca344a600576c357f8d",
+        "android_client_info": {
+          "package_name": "com.example.carros"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419133560440-j1uc54ups4o1jdb0006k0f7h3akjku8h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.carros",
+            "certificate_hash": "9fc0f5a4468cbde98085f8ff60c8a7d5bd9df9b4"
+          }
+        },
+        {
+          "client_id": "419133560440-0bae56q2ogrb5bsknb7bstf8lt1v0k0c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDzWPYh6KFB3y5QxIWgMG0woF0NuuBTGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419133560440-0bae56q2ogrb5bsknb7bstf8lt1v0k0c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

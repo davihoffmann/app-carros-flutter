@@ -1,5 +1,6 @@
 import 'package:carros/models/usuario.dart';
 import 'package:carros/pages/login_page.dart';
+import 'package:carros/service/firebase_service.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
 
@@ -52,18 +53,20 @@ class DrawerList extends StatelessWidget {
 
   UserAccountsDrawerHeader _userHeader(Usuario user) {
     return UserAccountsDrawerHeader(
-      currentAccountPicture: CircleAvatar(
-        backgroundImage: NetworkImage(user.urlFoto),
-      ),
-      accountName: Text(user.nome),
+      currentAccountPicture: user.urlFoto != null
+          ? CircleAvatar(
+              backgroundImage: NetworkImage(user.urlFoto),
+            )
+          : FlutterLogo(),
+      accountName: Text(user.nome ?? ''),
       accountEmail: Text(user.email),
     );
   }
 
   _onClickLogout(BuildContext context) {
     Usuario.clear();
+    FirebaseService().logout();
     Navigator.pop(context);
     push(context, LoginPage(), replace: true);
   }
-  
 }
