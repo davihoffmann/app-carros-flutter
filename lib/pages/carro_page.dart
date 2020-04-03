@@ -33,13 +33,15 @@ class _CarroPageState extends State<CarroPage> {
   // Declaração da classe bloc
   final _loripsumBloc = LoripsumBloc();
 
+  final favoritoService = FavoritoService();
+
   Color color = Colors.grey;
 
   @override
   void initState() {
     super.initState();
 
-    FavoritoService.isFavorito(widget.carro).then((favorito) {
+    favoritoService.isFavorito(widget.carro).then((favorito) {
       setState(() {
         color = favorito ? Colors.red : Colors.grey;
       });
@@ -212,7 +214,7 @@ class _CarroPageState extends State<CarroPage> {
   }
 
   _onClickFavorito() async {
-    bool favorito = await FavoritoService.favoritar(context, widget.carro);
+    bool favorito = await favoritoService.favoritar(widget.carro);
 
     setState(() {
       color = favorito ? Colors.red : Colors.grey;

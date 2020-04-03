@@ -2,7 +2,7 @@ import 'package:carros/utils/prefs.dart';
 import 'dart:convert' as convert;
 
 class Usuario {
-  int id;
+  String id;
   String login;
   String nome;
   String email;

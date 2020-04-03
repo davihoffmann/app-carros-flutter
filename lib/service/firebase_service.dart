@@ -1,9 +1,12 @@
 import 'package:carros/models/usuario.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'api_response.dart';
+
+String firebaseUserUid;
 
 class FirebaseService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -26,19 +29,24 @@ class FirebaseService {
 
       // Login no Firebase
       AuthResult result = await _auth.signInWithCredential(credential);
-      final FirebaseUser fuser = result.user;
-      print("Firebase Nome: ${fuser.displayName}");
-      print("Firebase Email: ${fuser.email}");
-      print("Firebase Foto: ${fuser.photoUrl}");
+      final FirebaseUser fUser = result.user;
+      print("Firebase Nome: ${fUser.displayName}");
+      print("Firebase Email: ${fUser.email}");
+      print("Firebase Foto: ${fUser.photoUrl}");
+
+      print(fUser.uid);
 
       // Cria um usuario do app
       final user = Usuario(
-        nome: fuser.displayName,
-        login: fuser.email,
-        email: fuser.email,
-        urlFoto: fuser.photoUrl,
+        id: fUser.uid,
+        nome: fUser.displayName,
+        login: fUser.email,
+        email: fUser.email,
+        urlFoto: fUser.photoUrl,
       );
       user.save();
+
+      saveUser(user);
 
       // Resposta genérica
       //return ApiResponse.ok(result: user);
@@ -60,12 +68,15 @@ class FirebaseService {
 
       // Cria um usuario do app
       final user = Usuario(
+        id: fUser.uid,
         nome: fUser.displayName,
         login: fUser.email,
         email: fUser.email,
         urlFoto: fUser.photoUrl,
       );
       user.save();
+
+      saveUser(user);
 
       // Resposta genérica
       //return ApiResponse.ok(result: user);
@@ -77,6 +88,8 @@ class FirebaseService {
   }
 
   Future<void> logout() async {
+    //await FavoritoService().deleteCarros();
+
     await _auth.signOut();
     await _googleSignIn.signOut();
   }
@@ -118,4 +131,20 @@ class FirebaseService {
       return ApiResponse.error(msg: "Não foi possível criar um usuário");
     }
   }
+
+  void saveUser(Usuario fUser) async {
+    if(fUser != null) {
+      firebaseUserUid = fUser.id;
+      print(firebaseUserUid);
+      DocumentReference refUser = Firestore.instance.collection("users").document(firebaseUserUid);
+
+      refUser.setData({
+        'nome': fUser.nome,
+        'email': fUser.email,
+        'login': fUser.email,
+        'urlFoto': fUser.urlFoto
+      });
+    }
+  }
+
 }
