@@ -1,4 +1,5 @@
 import 'package:carros/bloc/login_bloc.dart';
+import 'package:carros/pages/cadastro_page.dart';
 import 'package:carros/pages/home_page.dart';
 import 'package:carros/service/api_response.dart';
 import 'package:carros/service/firebase_service.dart';
@@ -78,7 +79,35 @@ class _LoginPageState extends State<LoginPage> {
               child: GoogleSignInButton(
                 onPressed: _onClickGoogle,
               ),
-            )
+            ),
+            Container(
+              height: 46,
+              margin: EdgeInsets.only(top: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  InkWell(
+                    onTap: _onClickCadastrar,
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.input,
+                          color: Colors.grey,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 10),
+                          child: Text(
+                            "Cadastra-se",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -125,11 +154,15 @@ class _LoginPageState extends State<LoginPage> {
     final service = FirebaseService();
     ApiResponse response = await service.loginGoogle();
 
-    if(response.ok) {
+    if (response.ok) {
       push(context, HomePage(), replace: true);
     } else {
       alert(context, "Erro!", response.msg);
     }
+  }
+
+  void _onClickCadastrar() {
+    push(context, CadastroPage(), replace: true);
   }
 
   @override
