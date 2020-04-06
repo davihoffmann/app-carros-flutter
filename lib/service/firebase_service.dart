@@ -98,18 +98,10 @@ class FirebaseService {
     await _googleSignIn.signOut();
   }
 
-  Future<ApiResponse> cadastrar(String nome, String email, String senha) async {
+  Future<ApiResponse> cadastrar(String nome, String email, String senha, {File file}) async {
     try {
-      // Cria um usuario do app
-      final user = Usuario(
-        nome: nome,
-        login: email,
-        email: email,
-        urlFoto: "https://pngimage.net/wp-content/uploads/2018/05/default-user-image-png-7.png",
-      );
-      
       // Cria usuario do Firebase
-      AuthResult result = await _auth.createUserWithEmailAndPassword(email: user.email, password: senha);
+      AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: senha);
       final FirebaseUser fUser = result.user;
       print("Firebase Nome: ${fUser.displayName}");
       print("Firebase Email: ${fUser.email}");
@@ -117,8 +109,23 @@ class FirebaseService {
 
       // Dados para atualizar o usuario
       final userUpdateInfo = UserUpdateInfo();
-      userUpdateInfo.displayName = user.nome;
-      userUpdateInfo.photoUrl = user.urlFoto;
+      userUpdateInfo.displayName = nome;
+      userUpdateInfo.photoUrl = "https://pngimage.net/wp-content/uploads/2018/05/default-user-image-png-7.png";
+
+      if(file != null) {
+        userUpdateInfo.photoUrl = await FirebaseService.uploadFirebaseStorage(file);
+      }
+
+      print("foto do usuario >>> ${userUpdateInfo.photoUrl}");
+
+      // Cria um usuario do app
+      final user = Usuario(
+        id: fUser.uid,
+        nome: userUpdateInfo.displayName,
+        login: fUser.email,
+        email: fUser.email,
+        urlFoto: userUpdateInfo.photoUrl,
+      );
 
       fUser.updateProfile(userUpdateInfo);
       user.save();

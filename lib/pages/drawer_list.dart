@@ -52,6 +52,7 @@ class DrawerList extends StatelessWidget {
   }
 
   UserAccountsDrawerHeader _userHeader(Usuario user) {
+    print("foto do usuario: ${user.urlFoto}");
     return UserAccountsDrawerHeader(
       currentAccountPicture: user.urlFoto != null
           ? CircleAvatar(

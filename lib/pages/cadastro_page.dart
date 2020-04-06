@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:carros/pages/home_page.dart';
 import 'package:carros/pages/login_page.dart';
 import 'package:carros/service/firebase_service.dart';
@@ -5,6 +7,7 @@ import 'package:carros/utils/alert.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/app_campo_texto.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CadastroPage extends StatefulWidget {
   @override
@@ -19,6 +22,8 @@ class _CadastroPageState extends State<CadastroPage> {
   final _tSenha = TextEditingController();
 
   var _progress = false;
+
+  File _file;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +42,23 @@ class _CadastroPageState extends State<CadastroPage> {
         padding: EdgeInsets.all(20),
         child: ListView(
           children: <Widget>[
+            InkWell(
+              onTap: _onClickFoto,
+              child: this._file != null
+                  ? Image.file(this._file, height: 150,)
+                  : Image.asset(
+                      "assets/images/camera_icon.png",
+                      height: 150,
+                    ),
+            ),
+            Text(
+              "Toque na imagem para tirar uma foto",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
+            ),
             AppCampoTexto(
               'Nome',
               'Informe o seu nome',
@@ -103,6 +125,16 @@ class _CadastroPageState extends State<CadastroPage> {
     );
   }
 
+  void _onClickFoto() async {
+    File file = await ImagePicker.pickImage(source: ImageSource.camera);
+
+    if (file != null) {
+      setState(() {
+        this._file = file;
+      });
+    }
+  }
+
   _onClickCadastrar(BuildContext context) async {
     String nome = _tNome.text;
     String email = _tEmail.text;
@@ -110,7 +142,7 @@ class _CadastroPageState extends State<CadastroPage> {
 
     print("Nome: $nome, Email: $email, Senha: $senha");
 
-    if(!_formKey.currentState.validate()) {
+    if (!_formKey.currentState.validate()) {
       return;
     }
 
@@ -119,9 +151,9 @@ class _CadastroPageState extends State<CadastroPage> {
     });
 
     final service = FirebaseService();
-    final response = await service.cadastrar(nome, email, senha);
+    final response = await service.cadastrar(nome, email, senha, file: _file);
 
-    if(response.ok) {
+    if (response.ok) {
       push(context, HomePage(), replace: true);
     } else {
       alert(context, "Erro!", response.msg);
@@ -156,5 +188,4 @@ class _CadastroPageState extends State<CadastroPage> {
     }
     return null;
   }
-
 }
