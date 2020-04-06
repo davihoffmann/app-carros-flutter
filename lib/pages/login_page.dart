@@ -1,10 +1,12 @@
 import 'package:carros/bloc/login_bloc.dart';
+import 'package:carros/models/usuario.dart';
 import 'package:carros/pages/cadastro_page.dart';
 import 'package:carros/pages/home_page.dart';
 import 'package:carros/service/api_response.dart';
 import 'package:carros/service/firebase_message.dart';
 import 'package:carros/service/firebase_service.dart';
 import 'package:carros/utils/alert.dart';
+import 'package:carros/utils/fingerprint.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/app_button.dart';
 import 'package:carros/widgets/app_campo_texto.dart';
@@ -27,6 +29,9 @@ class _LoginPageState extends State<LoginPage> {
 
   final _focusSenha = FocusNode();
 
+  Usuario usuario;
+  var showForm = false;
+
   @override
   void initState() {
     super.initState();
@@ -37,19 +42,46 @@ class _LoginPageState extends State<LoginPage> {
       try {
         remoteConfig.fetch(expiration: const Duration(hours: 1));
         remoteConfig.activateFetched();
-      } catch(error) {
+      } catch (error) {
         print("Remote Config: $error");
       }
-      
+
       final mensagem = remoteConfig.getString("mensagem");
       print("mensagem > $mensagem");
     });
 
+    getUsuario();
+
     initFcm();
+  }
+
+  getUsuario() {
+    Future<Usuario> futureUuario = Usuario.get();
+    futureUuario.then((user) {
+      setState(() {
+        this.usuario = user;
+
+        print(usuario);
+
+        if(user != null) {
+          showForm = true;
+        } else {
+          showForm = true;
+        }
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if(!showForm) {
+      return Container(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Carros'),
@@ -131,6 +163,21 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
+            Opacity(
+              opacity: this.usuario != null ? 1 : 0,
+              child: Container(
+                height: 45,
+                child: InkWell(
+                  onTap: () {
+                    _onClickFingerprint(context);
+                  },
+                  child: Image.asset(
+                    "assets/images/fingerprint.png",
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -195,4 +242,14 @@ class _LoginPageState extends State<LoginPage> {
     _bloc.dispose();
   }
 
+  void _onClickFingerprint(BuildContext context) async {
+    final face = await FingerPrint.canCheckFaceId();
+
+    print(face);
+
+    final ok = await FingerPrint.verify();
+    if(ok) {
+      push(context, HomePage(), replace: true);
+    }
+  }
 }

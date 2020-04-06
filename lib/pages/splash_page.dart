@@ -4,7 +4,6 @@ import 'package:carros/pages/login_page.dart';
 import 'package:carros/service/firebase_service.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
-import 'home_page.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -29,9 +28,10 @@ class _SplashPageState extends State<SplashPage> {
       if (user != null) {
         firebaseUserUid = user.id;
         
-        push(context, HomePage(), replace: true);
+        push(context, LoginPage(), replace: true);
       } else {
         push(context, LoginPage(), replace: true);
+        //push(context, LoginPage(), replace: true);
       }
     });
   }
