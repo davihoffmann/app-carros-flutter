@@ -2,11 +2,13 @@ import 'package:carros/bloc/login_bloc.dart';
 import 'package:carros/pages/cadastro_page.dart';
 import 'package:carros/pages/home_page.dart';
 import 'package:carros/service/api_response.dart';
+import 'package:carros/service/firebase_message.dart';
 import 'package:carros/service/firebase_service.dart';
 import 'package:carros/utils/alert.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/app_button.dart';
 import 'package:carros/widgets/app_campo_texto.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 
@@ -24,6 +26,27 @@ class _LoginPageState extends State<LoginPage> {
   final _tSenha = TextEditingController();
 
   final _focusSenha = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    RemoteConfig.instance.then((remoteConfig) {
+      remoteConfig.setConfigSettings(RemoteConfigSettings(debugMode: true));
+
+      try {
+        remoteConfig.fetch(expiration: const Duration(hours: 1));
+        remoteConfig.activateFetched();
+      } catch(error) {
+        print("Remote Config: $error");
+      }
+      
+      final mensagem = remoteConfig.getString("mensagem");
+      print("mensagem > $mensagem");
+    });
+
+    initFcm();
+  }
 
   @override
   Widget build(BuildContext context) {

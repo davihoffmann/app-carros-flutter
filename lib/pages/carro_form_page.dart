@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carros/models/carro.dart';
 import 'package:carros/service/api_response.dart';
 import 'package:carros/service/carro_service.dart';
+import 'package:carros/service/firebase_service.dart';
 import 'package:carros/utils/alert.dart';
 import 'package:carros/utils/event_bus.dart';
 import 'package:carros/utils/nav.dart';
@@ -203,12 +204,15 @@ class _CarroFormPageState extends State<CarroFormPage> {
   }
 
   void _onClickFoto() async {
-    File file = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if (file != null) {
-      setState(() {
-        this._file = file;
-      });
-    }
+    File file = await ImagePicker.pickImage(source: ImageSource.camera);
+
+    FirebaseService.uploadFirebaseStorage(file);
+
+    //if (file != null) {
+    //  setState(() {
+    //    this._file = file;
+    //  });
+    //}
   }
 
   _onClickSalvar() async {

@@ -54,8 +54,17 @@ dependencies:
   firebase_core: ^0.4.4+3
   google_sign_in: ^4.4.0
 
-  #Plugin para utuilização do Cloud Firestore (banco de dados realtime do firebase)
+  # Plugin para utuilização do Cloud Firestore (banco de dados realtime do firebase)
   cloud_firestore: ^0.13.4+2
+
+  # Plugin para Push Notification
+  firebase_messaging: ^6.0.13
+
+  # Plugin para acessar informacoes da nuvem do firebase
+  firebase_remote_config: ^0.3.0+3
+
+  # Plugin para upload de arquivos para o firebase
+  firebase_storage: ^3.1.5
 
 
   # The following adds the Cupertino Icons font to your application.
