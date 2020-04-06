@@ -1,5 +1,6 @@
 import 'package:carros/models/usuario.dart';
 import 'package:carros/pages/login_page.dart';
+import 'package:carros/pages/site_page.dart';
 import 'package:carros/service/firebase_service.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +15,13 @@ class DrawerList extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             FutureBuilder<Usuario>(
-                future: future,
-                builder: (context, snapshot) {
-                  Usuario usuario = snapshot.data;
+              future: future,
+              builder: (context, snapshot) {
+                Usuario usuario = snapshot.data;
 
-                  return usuario != null ? _userHeader(usuario) : Container();
-                }),
+                return usuario != null ? _userHeader(usuario) : Container();
+              },
+            ),
             ListTile(
               leading: Icon(Icons.star),
               title: Text('Favoritos'),
@@ -27,6 +29,15 @@ class DrawerList extends StatelessWidget {
               trailing: Icon(Icons.arrow_forward_ios),
               onTap: () {
                 Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.web),
+              title: Text('Visitar Site'),
+              subtitle: Text('mais informaçoes...'),
+              trailing: Icon(Icons.arrow_forward_ios),
+              onTap: () {
+                _onClickSite(context);
               },
             ),
             ListTile(
@@ -69,5 +80,10 @@ class DrawerList extends StatelessWidget {
     FirebaseService().logout();
     Navigator.pop(context);
     push(context, LoginPage(), replace: true);
+  }
+
+  void _onClickSite(BuildContext context) {
+    pop(context);
+    push(context, SitePage());
   }
 }
