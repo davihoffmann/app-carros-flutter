@@ -7,8 +7,9 @@ import 'package:share/share.dart';
 
 class CarrosList extends StatelessWidget {
   final List<Carro> carros;
+  final bool search;
 
-  CarrosList(this.carros);
+  CarrosList(this.carros, {this.search = false});
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +75,7 @@ class CarrosList extends StatelessWidget {
   }
 
   _onClickCarro(BuildContext context, Carro carro) {
+    // Nevega para tela de detalhes
     push(context, CarroPage(carro));
   }
 

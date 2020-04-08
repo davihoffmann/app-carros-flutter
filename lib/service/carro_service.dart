@@ -27,6 +27,20 @@ class CarroService {
     return carros;
   }
 
+  static Future<List<Carro>> getAllCarros() async {
+    var url = 'https://carros-springboot.herokuapp.com/api/v1/carros';
+
+    print("GET > $url");
+
+    var response = await http.get(url);
+
+    List list = json.decode(response.body);
+
+    List<Carro> carros = list.map<Carro>((map) => Carro.fromMap(map)).toList();
+
+    return carros;
+  }
+
   static Future<ApiResponse<bool>> save(Carro carro, File file) async {
     try {
 
@@ -97,5 +111,20 @@ class CarroService {
       print(e);
       return ApiResponse.error(msg: "Não foi possível deletar o carro!");
     }
+  }
+
+  static Future<List<Carro>> search(String query) async {
+    List<Carro> carros = await getAllCarros();
+
+    List<Carro> list = [];
+    for(Carro c in carros) {
+      if(c.nome != null) {
+        if(c.nome.toUpperCase().contains(query.toUpperCase())) {
+          list.add(c);
+        }
+      }
+    }
+
+    return list;
   }
 }

@@ -1,8 +1,13 @@
+import 'dart:ffi';
+
+import 'package:carros/models/carro.dart';
 import 'package:carros/pages/carro_form_page.dart';
 import 'package:carros/pages/carros_page.dart';
+import 'package:carros/pages/carros_search.dart';
 import 'package:carros/pages/drawer_list.dart';
 import 'package:carros/pages/favoritos_page.dart';
 import 'package:carros/service/carro_service.dart';
+import 'package:carros/utils/alert.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/utils/prefs.dart';
 
@@ -13,7 +18,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>with SingleTickerProviderStateMixin<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin<HomePage> {
   TabController _tabController;
 
   @override
@@ -46,6 +52,12 @@ class _HomePageState extends State<HomePage>with SingleTickerProviderStateMixin<
     return Scaffold(
       appBar: AppBar(
         title: Text('Carros'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: _onClickSearch,
+          )
+        ],
         bottom: _tabController == null
             ? null
             : TabBar(
@@ -90,5 +102,18 @@ class _HomePageState extends State<HomePage>with SingleTickerProviderStateMixin<
 
   void _onClickAdicionarCarro() {
     push(context, CarroFormPage());
+  }
+
+  void _onClickSearch() async {
+    final carro = await showSearch<Carro>(
+      context: context,
+      delegate: CarrosSearch(),
+    );
+
+    print("resultado: $carro");
+
+    if(carro != null) {
+      alert(context, "Busca", carro.nome);
+    }
   }
 }
